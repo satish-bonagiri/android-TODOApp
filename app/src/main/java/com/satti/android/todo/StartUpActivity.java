@@ -23,6 +23,7 @@ import java.util.List;
 
 public class StartUpActivity extends AppCompatActivity {
 
+    //FIXME refactor all this code to a fragment !
     private ImageView mFabAddButton;
     private RetrieveAllTasks mRetrieveAllTasks;
     CustomArrayAdapter mArrayAdapter;
@@ -36,7 +37,7 @@ public class StartUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mListView = (ListView)findViewById(R.id.task_listview);
         mTodoDao = new TodoDao(getApplicationContext());
-        mTaskList = new ArrayList<Task>();
+        mTaskList = new ArrayList<>();
         mArrayAdapter = new CustomArrayAdapter(StartUpActivity.this,R.layout.listitem, mTaskList,false);
         mListView.setEmptyView(findViewById(R.id.list_empty_view));
         mListView.setAdapter(mArrayAdapter);
