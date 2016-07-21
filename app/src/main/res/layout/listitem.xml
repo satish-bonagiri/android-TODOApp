@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_listitem"
+    android:orientation="vertical"
+    android:gravity="center_vertical">
+
+
+    <TextView
+        android:layout_toLeftOf="@+id/edit_imageview"
+        android:id="@+id/name_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/blue"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:id="@+id/priority_textview"
+        android:layout_below="@id/name_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/black"
+        android:minLines="1"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:id="@+id/date_textview"
+        android:layout_below="@id/priority_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/black"
+        android:minLines="1"
+        android:maxLines="1"
+        android:textStyle="italic"
+        android:ellipsize="end"/>
+
+
+    <!-- android:textAppearance="?android:attr/textAppearanceMedium" -->
+
+    <ImageView
+        android:id="@+id/edit_imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_content_create"
+        android:clickable="true"
+        />
+
+    <ImageView
+        android:id="@+id/delete_imageview"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/edit_imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_delete"
+        android:clickable="true"/>
+
+
+
+</RelativeLayout>

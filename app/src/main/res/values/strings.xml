@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">ToDoApp</string>
+    <string name="add_a_task">Add A Task</string>
+    <string name="edit_a_task">Edit The Task</string>
+    <string name="search">Search for tasks</string>
+
+    <string name="sort_by_date">Sort By Date</string>
+    <string name="sort_by_name">Sort By Name</string>
+    <string name="sort_by_priority">Sort By Priority</string>
+
+    <string name="task_name">Enter the Task name</string>
+    <string name="task_priority">Select the Priority of the Task</string>
+    <string name="task_date">Select the Date</string>
+    <string name="task_save">Save Task</string>
+    <string name="task_edit">Edit Task</string>
+    <string name="task_search">Enter task name </string>
+    <string name="error_taskname">Task name is empty !!!</string>
+    <string name="task_save_sucess">Task Saved Successfully  !!!</string>
+    <string name="task_edit_sucess">Task Edited Successfully  !!!</string>
+    <string name="task_delete_sucess">Task Deleted Successfully  !!!</string>
+
+    <string name="no_task_data">Tap the add (+) to create a task</string>
+
+    <string-array name="priority_array">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+        <item>Urgent</item>
+    </string-array>
+</resources>

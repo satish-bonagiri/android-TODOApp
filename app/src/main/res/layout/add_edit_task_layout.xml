@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_marginLeft="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="5dp"
+                android:orientation="vertical">
+
+<!--                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:hintTextAppearance="@style/TextLabel">-->
+
+                    <EditText
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:id="@+id/task_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/task_name"
+                        android:minLines="2"
+                        android:textAppearance="@style/TextValue"
+                         />
+                <!--</android.support.design.widget.TextInputLayout>-->
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/task_priority" />
+
+
+                <Spinner
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/task_priority_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    />
+
+                <!--<android.support.design.widget.TextInputLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="10dp"-->
+                    <!--app:hintTextAppearance="@style/TextLabel">-->
+
+                    <EditText
+                        android:id="@+id/date_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/task_date"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:inputType="date"
+                        android:focusableInTouchMode="false"
+                        android:focusable="false"
+                        android:clickable="true"
+                        />
+                <!--</android.support.design.widget.TextInputLayout>-->
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_addTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:text="@string/task_save"
+                android:background="@drawable/bg_btn"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"
+                android:onClick="onSaveBtnClick"
+                android:layout_marginBottom="10dp"/>
+
+            <Button
+                android:id="@+id/btn_editTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:text="@string/task_edit"
+                android:background="@drawable/bg_btn"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"
+                android:onClick="onEditBtnClick"
+                android:layout_marginBottom="10dp"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
