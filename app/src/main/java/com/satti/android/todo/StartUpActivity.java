@@ -37,7 +37,7 @@ public class StartUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mListView = (ListView)findViewById(R.id.task_listview);
         mTodoDao = new TodoDao(getApplicationContext());
-        mTaskList = new ArrayList<>();
+        mTaskList = new ArrayList<Task>();
         mArrayAdapter = new CustomArrayAdapter(StartUpActivity.this,R.layout.listitem, mTaskList,false);
         mListView.setEmptyView(findViewById(R.id.list_empty_view));
         mListView.setAdapter(mArrayAdapter);
