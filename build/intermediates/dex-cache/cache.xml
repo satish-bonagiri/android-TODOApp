@@ -19,7 +19,7 @@
         jar="/Users/satish/android-ToDoApp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         revision="23.0.1"
-        sha1="0fe0e9de8938c56b6b8719bcec56234b00ff4fd2">
+        sha1="f9d2162184c17177b185116bb960489b9fd57168">
         <dex dex="/Users/satish/android-ToDoApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_2b42f60c25f98de1fc836f8cbc3d0ead1a009455/classes.dex" />
     </item>
     <item
@@ -54,7 +54,7 @@
         jar="/Users/satish/android-ToDoApp/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         revision="23.0.1"
-        sha1="b7460f9b316f09e9cc8bdcfcaba3ab204944b651">
+        sha1="f4a46a2ab8f15d0ca9cbbd692d18bb2007ca45d5">
         <dex dex="/Users/satish/android-ToDoApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_2b339698bc16e3a496dd48a04df5159856fde491/classes.dex" />
     </item>
 
