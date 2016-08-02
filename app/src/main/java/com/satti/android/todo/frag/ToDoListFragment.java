@@ -2,8 +2,11 @@ package com.satti.android.todo.frag;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,8 +24,10 @@ import com.satti.android.todo.R;
 import com.satti.android.todo.SearchActivity;
 import com.satti.android.todo.StartUpActivity;
 import com.satti.android.todo.adapter.CustomArrayAdapter;
+import com.satti.android.todo.adapter.CustomCursorAdapter;
 import com.satti.android.todo.db.TodoDao;
 import com.satti.android.todo.model.Task;
+import com.satti.android.todo.provider.ToDoProvider;
 import com.satti.android.todo.util.Log;
 import com.satti.android.todo.util.ProgressUtil;
 
@@ -37,11 +42,14 @@ import java.util.List;
  * Use the {@link ToDoListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ToDoListFragment extends Fragment {
+public class ToDoListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    public static final int REQUEST_FOR_ADD = 100;
+    public static final int REQUEST_FOR_EDIT = 101;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -50,10 +58,8 @@ public class ToDoListFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private ImageView mFabAddButton;
-    private RetrieveAllTasks mRetrieveAllTasks;
-    CustomArrayAdapter mArrayAdapter;
+    CustomCursorAdapter mCursorAdapter;
     ListView mListView;
-    List<Task> mTaskList;
     TodoDao mTodoDao;
     Activity mActivityContext;
     public ToDoListFragment() {
@@ -100,8 +106,6 @@ public class ToDoListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        //Log.i("ToDoListFragment onCreate END");
-
     }
 
 
@@ -113,21 +117,19 @@ public class ToDoListFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_to_do_list, container, false);
         mListView = (ListView)view.findViewById(R.id.task_listview);
         mTodoDao = new TodoDao(mActivityContext.getApplicationContext());
-        mTaskList = new ArrayList<Task>();
-        mArrayAdapter = new CustomArrayAdapter(getActivity(),R.layout.listitem, mTaskList,false);
+        mCursorAdapter = new CustomCursorAdapter(getActivity(),mTodoDao.getAllTaskCursor(),0,false);
         mListView.setEmptyView(view.findViewById(R.id.list_empty_view));
-        mListView.setAdapter(mArrayAdapter);
-        mArrayAdapter.notifyDataSetChanged();
+        mListView.setAdapter(mCursorAdapter);
+        mCursorAdapter.notifyDataSetChanged();
         mFabAddButton = (ImageView)view.findViewById(R.id.fab_add);
         mFabAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent addTaskIntent = new Intent(getActivity(),AddOrEditATaskActivity.class);
                 addTaskIntent.putExtra("isFromAdd",true);
-                startActivity(addTaskIntent);
+                startActivityForResult(addTaskIntent,REQUEST_FOR_ADD);
             }
         });
-       // Log.i("ToDoListFragment onCreateView END");
 
         return view;
 
@@ -136,13 +138,6 @@ public class ToDoListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (mRetrieveAllTasks == null) {
-            Log.d("ToDoListFragment onStart || mRetrieveAllTasks NULL");
-            mRetrieveAllTasks = new RetrieveAllTasks();
-            mRetrieveAllTasks.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }else{
-            Log.d("ToDoListFragment onStart || mRetrieveAllTasks NOT NULL");
-        }
     }
 
     @Override
@@ -150,7 +145,6 @@ public class ToDoListFragment extends Fragment {
         super.onResume();
         if(this.isAdded()) {
           //  Log.i("ToDoListFragment onResume");
-
         }
     }
 
@@ -181,13 +175,13 @@ public class ToDoListFragment extends Fragment {
         //return super.onOptionsItemSelected(item);
         switch (item.getItemId()){
             case R.id.menu_sort_by_date:
-                handleSortOPtions("date");
+                handleSortOptions("date");
                 return true;
             case R.id.menu_sort_by_name:
-                handleSortOPtions("name");
+                handleSortOptions("name");
                 return true;
             case R.id.menu_sort_by_priority:
-                handleSortOPtions("priority");
+                handleSortOptions("priority");
                 return true;
             case R.id.menu_search:
                 Intent searchIntent = new Intent(mActivityContext,SearchActivity.class);
@@ -198,15 +192,10 @@ public class ToDoListFragment extends Fragment {
     }
 
     //TODO ,move this code to background,to avoid ANR in low end devices !
-    public void handleSortOPtions(String sortCriteria){
-        List<Task> mTempList = mTodoDao.getAllTasksByCriteria(sortCriteria);
-        if(mTempList != null && mTempList.size() > 0){
-            mTaskList.clear(); //clear the old data
-            for(int i=0 ; i < mTempList.size() ;i++){
-                mTaskList.add(mTempList.get(i));
-            }
-            mArrayAdapter.notifyDataSetChanged();
-        }
+    public void handleSortOptions(String sortCriteria) {
+
+        mCursorAdapter.changeCursor(mTodoDao.getAllTasksByCriteriaCursor(sortCriteria));
+        mCursorAdapter.notifyDataSetChanged();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -220,12 +209,8 @@ public class ToDoListFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        if(mRetrieveAllTasks != null){
-            mRetrieveAllTasks.cancel(true);
-            mRetrieveAllTasks = null;
-        }
+
         super.onDestroy();
-      //  Log.i("ToDoListFragment onDestroy END");
 
     }
 
@@ -233,8 +218,35 @@ public class ToDoListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        //Log.i("ToDoListFragment onDetach END");
+    }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        //TODO
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        //TODO
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_FOR_EDIT ){
+            mCursorAdapter.changeCursor(mTodoDao.getAllTaskCursor());
+       //     mCursorAdapter.notifyDataSetChanged();
+        }else if(requestCode == REQUEST_FOR_ADD){
+            mCursorAdapter.changeCursor(mTodoDao.getAllTaskCursor());
+        //    mCursorAdapter.notifyDataSetChanged();
+        }
     }
 
     /**
@@ -250,48 +262,5 @@ public class ToDoListFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    private  class RetrieveAllTasks extends AsyncTask<Void,Void,Void>{
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            if(mActivityContext != null){
-             //   Log.i("RetrieveAllTasks onPreExecute");
-
-                ProgressUtil.displayProgressDialog(mActivityContext);
-            }
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            if(mTaskList != null){
-                mTaskList.clear(); //make sure , remove any old data
-            }
-            List<Task> mTempTaskList = mTodoDao.getAllTasks();
-            for(int i=0 ; i < mTempTaskList.size() ;i++){
-                mTaskList.add(mTempTaskList.get(i));
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-         //   Log.i("RetrieveAllTasks onPostExecute");
-
-            ProgressUtil.hideProgressDialog();
-            mRetrieveAllTasks = null;//to make sure to reload the data again !!!
-
-
-            if(mArrayAdapter != null){
-                mArrayAdapter.notifyDataSetChanged();
-            }
-//            if(mListView != null){
-//                mListView.setSelection(0);
-//            }
-        }
     }
 }

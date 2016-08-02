@@ -15,7 +15,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
 
     public static final String TODO_TABLE_NAME = "todo";
 
-    public static final String TODO_ID ="_tId";
+    public static final String TODO_ID ="_id";
     public static final String TODO_NAME = "tName";
     public static final String TODO_PRIORITY = "tPriority";
     public static final String TODO_TIMESTAMP = "timeStamp";

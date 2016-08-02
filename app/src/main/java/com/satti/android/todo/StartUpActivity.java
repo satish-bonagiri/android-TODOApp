@@ -1,6 +1,8 @@
 package com.satti.android.todo;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -30,7 +32,18 @@ public class StartUpActivity extends AppCompatActivity {
       //  Log.d("StartUpActivity onCreate END");
     }
 
-//    @Override
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Fragment toDoListFragment = (ToDoListFragment) getFragmentManager().findFragmentByTag(TAG_TASK_FRAGMENT);
+        if(toDoListFragment != null){
+            toDoListFragment.onActivityResult(requestCode,resultCode,data);
+        }
+
+
+    }
+
+    //    @Override
 //    protected void onResume() {
 //        super.onResume();
 //       // Log.d("StartUpActivity onResume END");

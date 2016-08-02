@@ -60,6 +60,13 @@ public class TodoDao {
         return noOFRowsEffected;
     }
 
+    public long deleteTask(String tid){
+        long noOFRowsEffected = -1;
+        if(!TextUtils.isEmpty(tid) ){
+            noOFRowsEffected = mContext.getContentResolver().delete(ToDoProvider.TODO_CONTENT_URI, SQLiteHelper.TODO_ID + "=?", new String[]{tid});
+        }
+        return noOFRowsEffected;
+    }
 
     private void populateContentValues(ContentValues contentValues,Task task) {
         contentValues.put(SQLiteHelper.TODO_NAME, task.getName());
@@ -162,5 +169,41 @@ public class TodoDao {
         }
 
         return mTasks;
+    }
+
+    public Task getTaskById(long tid){
+
+        Task task = new Task();
+        Cursor mCursor = mContext.getContentResolver().query(ToDoProvider.TODO_CONTENT_URI, null,SQLiteHelper.TODO_ID + "=?", new String[] {Long.toString(tid)} ,null);
+
+        if (mCursor != null && task != null && mCursor.getCount() > 0) {
+            mCursor.moveToFirst();
+            while (mCursor.isAfterLast() == false) {
+                populateTaskFromCursor(mCursor, task);
+                mCursor.moveToNext();
+            }
+        }
+        if (mCursor != null && !mCursor.isClosed()) {
+            mCursor.close();
+        }
+        return task;
+    }
+
+    public Cursor getAllTaskCursor(){
+        return mContext.getContentResolver().query(ToDoProvider.TODO_CONTENT_URI, null,null, null ," rowId DESC");
+    }
+
+    public Cursor getAllTasksByCriteriaCursor(String sortCriteria){
+        Cursor mCursor = null;
+        if(sortCriteria == null){
+            mCursor=  mContext.getContentResolver().query(ToDoProvider.TODO_CONTENT_URI, null,null, null ," rowId DESC");
+        }else if(sortCriteria.contains("date")){
+            mCursor = mContext.getContentResolver().query(ToDoProvider.TODO_CONTENT_URI, null,null, null ,SQLiteHelper.TODO_TIMESTAMP +" DESC");
+        }else if(sortCriteria.contains("priority")){
+            mCursor = mContext.getContentResolver().query(ToDoProvider.TODO_CONTENT_URI, null,null, null ,SQLiteHelper.TODO_PRIORITY +" DESC");
+        }else if(sortCriteria.contains("name")){
+            mCursor = mContext.getContentResolver().query(ToDoProvider.TODO_CONTENT_URI, null,null, null ,SQLiteHelper.TODO_NAME +" ASC");
+        }
+        return mCursor;
     }
 }

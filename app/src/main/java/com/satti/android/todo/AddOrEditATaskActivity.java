@@ -43,12 +43,16 @@ public class AddOrEditATaskActivity extends AppCompatActivity {
     private boolean isFromAdd;
     private Task mTask;
     private long mTaskID;
+    private TodoDao mTodoDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_edit_task_layout);
         initViews();
+        if(mTodoDao == null){
+            mTodoDao = new TodoDao(getApplicationContext());
+        }
         mBundle = getIntent().getExtras();
         isFromAdd = mBundle.getBoolean("isFromAdd");
         if(isFromAdd){ //from add flow
@@ -60,16 +64,19 @@ public class AddOrEditATaskActivity extends AppCompatActivity {
             setTitle(R.string.edit_a_task);
             mSaveButton.setVisibility(View.GONE);
             mEditButton.setVisibility(View.VISIBLE);
-            mTask = (Task)mBundle.get("task");
-            if(mTask != null){
-                mTaskID = mTask.getId();
-                mTaskName = mTask.getName();
-                mTaskEditText.setText(mTaskName);
-                mPriority = mTask.getPriority();
-                mPrioritySpinner.setSelection(mPriority);
-                mDateString = DateTimeUtil.getFormattedDate(mTask.getDateTimeStamp());
-                mDateEditText.setText(mDateString);
-                setCurrentDate(mTask.getDateTimeStamp());
+            mTaskID = (int) mBundle.get("taskId");
+            if(mTaskID != -1){
+                //TODO move this db code to background
+                Task task = mTodoDao.getTaskById(mTaskID);
+                if(task != null){
+                    mTaskName = task.getName();
+                    mTaskEditText.setText(mTaskName);
+                    mPriority = task.getPriority();
+                    mPrioritySpinner.setSelection(mPriority);
+                    mDateString = DateTimeUtil.getFormattedDate(task.getDateTimeStamp());
+                    mDateEditText.setText(mDateString);
+                    setCurrentDate(task.getDateTimeStamp());
+                }
             }
         }
     }
