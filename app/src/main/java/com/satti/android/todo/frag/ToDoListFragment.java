@@ -193,7 +193,7 @@ public class ToDoListFragment extends Fragment implements LoaderManager.LoaderCa
 
     //TODO ,move this code to background,to avoid ANR in low end devices !
     public void handleSortOptions(String sortCriteria) {
-
+        mCursorAdapter.setSortCriteria(sortCriteria);
         mCursorAdapter.changeCursor(mTodoDao.getAllTasksByCriteriaCursor(sortCriteria));
         mCursorAdapter.notifyDataSetChanged();
     }

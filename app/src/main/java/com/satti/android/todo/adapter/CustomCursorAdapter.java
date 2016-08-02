@@ -32,6 +32,8 @@ public class CustomCursorAdapter extends CursorAdapter {
     private Context mContext;
     private TodoDao mTodoDao;
 
+    private String mSortCriteria  = null ;
+
 
     public CustomCursorAdapter(Context context, Cursor c, int flags,boolean isFromSearch) {
         super(context, c, flags);
@@ -107,11 +109,15 @@ public class CustomCursorAdapter extends CursorAdapter {
                         Toast.makeText(mContext,R.string.task_delete_sucess,Toast.LENGTH_SHORT).show();
                     }
                     //FIXME do it in background
-                    Cursor mCursor = mTodoDao.getAllTasksByCriteriaCursor(null);
+                    Cursor mCursor = mTodoDao.getAllTasksByCriteriaCursor(mSortCriteria);
                     swapCursor(mCursor);
                     notifyDataSetChanged();
                     break;
             }
         }
     };
+
+    public void setSortCriteria(String sortCriteria) {
+        this.mSortCriteria = sortCriteria;
+    }
 }
