@@ -42,7 +42,7 @@ import java.util.List;
  * Use the {@link ToDoListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ToDoListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class ToDoListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -218,23 +218,6 @@ public class ToDoListFragment extends Fragment implements LoaderManager.LoaderCa
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        //TODO
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        //TODO
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        //TODO
     }
 
     @Override
